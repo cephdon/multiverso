@@ -6,6 +6,7 @@ OPTION(USE_HDFS "won't use hdfs on default, set ON to enable" OFF)
 OPTION(TEST "Build all tests." ON)
 OPTION(USE_ZMQ "weather to build with ZeroMQ.(default: OFF)" OFF)
 OPTION(INSTALL_MULTIVERSO "whether install Multiverso to /usr/local/lib" ON)
+option(ENABLE_DCASGD "Build with DC-ASGD supported" OFF)
 
 find_package(MPI REQUIRED)
 
@@ -20,6 +21,10 @@ if(USE_HDFS)
     LINK_DIRECTORIES(${JVM_LIB})
 endif(USE_HDFS)
 
+if(ENABLE_DCASGD)
+    ADD_DEFINITIONS(-DENABLE_DCASGD)
+endif(ENABLE_DCASGD)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(MULTIVERSO_DIR ${PROJECT_SOURCE_DIR})
@@ -29,9 +34,9 @@ ADD_SUBDIRECTORY(Test/unittests)
 ADD_SUBDIRECTORY(Applications/WordEmbedding)
 ADD_SUBDIRECTORY(Applications/LogisticRegression)
 
-if(USE_INSTALL_MULTIVERSO)
+if(INSTALL_MULTIVERSO)
     install (DIRECTORY ${PROJECT_SOURCE_DIR}/include/multiverso DESTINATION include)
-endif(USE_INSTALL_MULTIVERSO)
+endif(INSTALL_MULTIVERSO)
 
 
 # uninstall target
